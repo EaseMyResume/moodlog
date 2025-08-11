@@ -16,6 +16,7 @@
 
         :root {
             --primary: #6c63ff;
+            --primary-light: #8580ff;
             --secondary: #4a44b5;
             --background: #f8f9ff;
             --card-bg: #ffffff;
@@ -27,6 +28,7 @@
             --excited: #ff9800;
             --calm: #9c27b0;
             --shadow: rgba(108, 99, 255, 0.15);
+            --danger: #ff4d6d;
         }
 
         body {
@@ -47,6 +49,8 @@
             align-items: center;
             padding: 20px 0;
             margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
         .logo {
@@ -69,6 +73,12 @@
             color: transparent;
         }
 
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
         .date-display {
             background: var(--card-bg);
             padding: 10px 20px;
@@ -76,6 +86,9 @@
             box-shadow: 0 4px 15px var(--shadow);
             font-weight: 600;
             color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .dashboard {
@@ -90,11 +103,24 @@
             border-radius: 20px;
             padding: 25px;
             box-shadow: 0 8px 20px var(--shadow);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(108, 99, 255, 0.2);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
         .card h2 {
@@ -113,6 +139,7 @@
             display: flex;
             justify-content: space-around;
             margin: 20px 0;
+            flex-wrap: wrap;
         }
 
         .mood-option {
@@ -124,6 +151,7 @@
             border-radius: 15px;
             transition: all 0.3s ease;
             width: 18%;
+            min-width: 80px;
         }
 
         .mood-option:hover {
@@ -133,6 +161,7 @@
         .mood-option.selected {
             background: rgba(108, 99, 255, 0.1);
             transform: scale(1.05);
+            box-shadow: 0 4px 10px var(--shadow);
         }
 
         .mood-icon {
@@ -193,6 +222,12 @@
             padding: 15px;
             border-radius: 15px;
             background: rgba(108, 99, 255, 0.05);
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .selected-mood i {
@@ -236,6 +271,7 @@
             border-radius: 20px;
             padding: 25px;
             box-shadow: 0 8px 20px var(--shadow);
+            position: relative;
         }
 
         .chart-card h2 {
@@ -270,11 +306,17 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            box-shadow: 0 4px 10px var(--shadow);
         }
 
         .btn:hover {
             background: var(--secondary);
             transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(108, 99, 255, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
         }
 
         .btn-outline {
@@ -287,6 +329,14 @@
             background: rgba(108, 99, 255, 0.1);
         }
 
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #ff3355;
+        }
+
         .history {
             background: var(--card-bg);
             border-radius: 20px;
@@ -295,12 +345,35 @@
             margin-bottom: 30px;
         }
 
-        .history h2 {
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .history-header h2 {
             color: var(--secondary);
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-controls select {
+            padding: 8px 15px;
+            border-radius: 30px;
+            border: 2px solid var(--primary);
+            background: var(--background);
+            color: var(--text);
+            font-weight: 500;
         }
 
         .history-list {
@@ -316,6 +389,18 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            transition: transform 0.3s ease;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .history-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(108, 99, 255, 0.15);
         }
 
         .history-item i {
@@ -368,11 +453,85 @@
             margin-top: 3px;
         }
 
+        .empty-history {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: var(--text-light);
+        }
+
+        .empty-history i {
+            font-size: 60px;
+            margin-bottom: 15px;
+            color: var(--primary-light);
+        }
+
+        .empty-history p {
+            font-size: 18px;
+        }
+
         footer {
             text-align: center;
             padding: 20px;
             color: var(--text-light);
             font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .footer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        /* Confirmation modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: modalIn 0.4s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+
+        .modal-content p {
+            margin-bottom: 25px;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
         }
 
         /* Responsive design */
@@ -382,12 +541,12 @@
             }
             
             .mood-selector {
-                flex-wrap: wrap;
                 gap: 10px;
             }
             
             .mood-option {
                 width: 30%;
+                min-width: auto;
             }
         }
 
@@ -402,8 +561,11 @@
             
             header {
                 flex-direction: column;
-                gap: 15px;
                 text-align: center;
+            }
+            
+            .header-controls {
+                justify-content: center;
             }
         }
     </style>
@@ -415,7 +577,15 @@
                 <i class="fas fa-smile-beam"></i>
                 <h1>Mood Tracker</h1>
             </div>
-            <div class="date-display" id="currentDate">Wednesday, August 12, 2025</div>
+            <div class="header-controls">
+                <div class="date-display">
+                    <i class="fas fa-calendar"></i>
+                    <span id="currentDate">Wednesday, August 12, 2025</span>
+                </div>
+                <button class="btn btn-danger" id="clearDataBtn">
+                    <i class="fas fa-trash-alt"></i> Clear Data
+                </button>
+            </div>
         </header>
 
         <div class="dashboard">
@@ -494,15 +664,47 @@
         </div>
         
         <div class="history">
-            <h2><i class="fas fa-history"></i> Mood History</h2>
+            <div class="history-header">
+                <h2><i class="fas fa-history"></i> Mood History</h2>
+                <div class="filter-controls">
+                    <select id="historyFilter">
+                        <option value="all">All Entries</option>
+                        <option value="week">Last Week</option>
+                        <option value="month">Last Month</option>
+                    </select>
+                    <button class="btn btn-outline" id="clearHistoryBtn">
+                        <i class="fas fa-trash"></i> Clear History
+                    </button>
+                </div>
+            </div>
             <div class="history-list" id="moodHistory">
                 <!-- Mood history items will be added here by JavaScript -->
             </div>
         </div>
         
         <footer>
+            <div class="footer-controls">
+                <button class="btn" id="exportDataBtn">
+                    <i class="fas fa-download"></i> Export Data
+                </button>
+                <button class="btn btn-outline" id="importDataBtn">
+                    <i class="fas fa-upload"></i> Import Data
+                </button>
+            </div>
             <p>© 2025 Mood Tracker | Your emotions matter. Track them daily for better mental well-being.</p>
         </footer>
+    </div>
+
+    <!-- Clear Data Confirmation Modal -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h3>
+            <p>Are you sure you want to delete all your mood data? This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn btn-danger" id="confirmDeleteBtn">Yes, Delete All</button>
+                <button class="btn btn-outline" id="cancelDeleteBtn">Cancel</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -563,6 +765,17 @@
             const today = new Date().toISOString().split('T')[0];
             const todayEntry = moodData.entries.find(entry => entry.date === today);
             return todayEntry ? todayEntry.mood : null;
+        }
+
+        // Clear all data
+        function clearAllData() {
+            const initialData = {
+                entries: [],
+                lastUpdated: new Date().toISOString().split('T')[0]
+            };
+            localStorage.setItem('moodData', JSON.stringify(initialData));
+            updateUI();
+            closeModal();
         }
 
         // UI Update functions
@@ -649,6 +862,10 @@
                                 }
                             }
                         }
+                    },
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true
                     }
                 }
             });
@@ -667,7 +884,9 @@
                         tension: 0.4,
                         fill: true,
                         pointRadius: 6,
-                        pointHoverRadius: 8
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: '#fff',
+                        pointBorderWidth: 2
                     }]
                 },
                 options: {
@@ -691,6 +910,22 @@
                                 }
                             }
                         }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const moods = {
+                                        1: 'Angry',
+                                        2: 'Sad',
+                                        3: 'Calm',
+                                        4: 'Happy',
+                                        5: 'Excited'
+                                    };
+                                    return `Mood: ${moods[context.raw] || 'No data'}`;
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -705,12 +940,18 @@
                         label: 'Mood Count',
                         data: Object.keys(MOODS).map(() => 0),
                         backgroundColor: Object.values(MOODS).map(m => m.color),
-                        borderWidth: 0
+                        borderWidth: 0,
+                        borderRadius: 5
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
                 }
             });
         }
@@ -801,50 +1042,90 @@
         function updateHistory() {
             const historyContainer = document.getElementById('moodHistory');
             const moodData = getMoodData();
+            const filter = document.getElementById('historyFilter').value;
             
             // Clear container
             historyContainer.innerHTML = '';
             
             // Sort entries by date (newest first)
-            const sortedEntries = [...moodData.entries].sort((a, b) => {
+            let sortedEntries = [...moodData.entries].sort((a, b) => {
                 return new Date(b.date) - new Date(a.date);
             });
             
-            // Add entries to history
-            sortedEntries.forEach(entry => {
-                const mood = MOODS[entry.mood];
-                const entryDate = new Date(entry.date);
-                const dateStr = entryDate.toLocaleDateString('en-US', { 
-                    month: 'short', 
-                    day: 'numeric',
-                    year: 'numeric'
+            // Apply filter
+            const now = new Date();
+            if (filter === 'week') {
+                const oneWeekAgo = new Date();
+                oneWeekAgo.setDate(now.getDate() - 7);
+                sortedEntries = sortedEntries.filter(entry => {
+                    const entryDate = new Date(entry.date);
+                    return entryDate >= oneWeekAgo;
                 });
-                
-                const historyItem = document.createElement('div');
-                historyItem.className = 'history-item';
-                historyItem.innerHTML = `
-                    <i class="fas ${mood.icon} ${entry.mood}"></i>
-                    <div class="history-content">
-                        <div class="history-date">${dateStr}</div>
-                        <div class="history-mood">${mood.label}</div>
-                    </div>
+            } else if (filter === 'month') {
+                const oneMonthAgo = new Date();
+                oneMonthAgo.setMonth(now.getMonth() - 1);
+                sortedEntries = sortedEntries.filter(entry => {
+                    const entryDate = new Date(entry.date);
+                    return entryDate >= oneMonthAgo;
+                });
+            }
+            
+            // Add entries to history
+            if (sortedEntries.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.className = 'empty-history';
+                emptyMessage.innerHTML = `
+                    <i class="fas fa-inbox"></i>
+                    <p>No mood entries found</p>
                 `;
-                
-                historyContainer.appendChild(historyItem);
-            });
+                historyContainer.appendChild(emptyMessage);
+            } else {
+                sortedEntries.forEach(entry => {
+                    const mood = MOODS[entry.mood];
+                    const entryDate = new Date(entry.date);
+                    const dateStr = entryDate.toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                    
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `
+                        <i class="fas ${mood.icon} ${entry.mood}"></i>
+                        <div class="history-content">
+                            <div class="history-date">${dateStr}</div>
+                            <div class="history-mood">${mood.label}</div>
+                        </div>
+                    `;
+                    
+                    historyContainer.appendChild(historyItem);
+                });
+            }
         }
 
-        // Button event listeners
-        document.getElementById('prevWeekBtn').addEventListener('click', function() {
-            alert('Previous week data would be shown here in a full implementation');
+        // Modal functions
+        function openModal() {
+            document.getElementById('confirmationModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('confirmationModal').style.display = 'none';
+        }
+
+        // Event listeners
+        document.getElementById('historyFilter').addEventListener('change', updateHistory);
+        document.getElementById('clearHistoryBtn').addEventListener('click', clearAllData);
+        document.getElementById('clearDataBtn').addEventListener('click', openModal);
+        document.getElementById('confirmDeleteBtn').addEventListener('click', clearAllData);
+        document.getElementById('cancelDeleteBtn').addEventListener('click', closeModal);
+        
+        document.getElementById('exportDataBtn').addEventListener('click', function() {
+            alert('Export functionality would be implemented here');
         });
         
-        document.getElementById('nextWeekBtn').addEventListener('click', function() {
-            alert('Next week data would be shown here in a full implementation');
-        });
-        
-        document.getElementById('changeMonthBtn').addEventListener('click', function() {
-            alert('Month selector would appear here in a full implementation');
+        document.getElementById('importDataBtn').addEventListener('click', function() {
+            alert('Import functionality would be implemented here');
         });
 
         // Initialize application
@@ -858,41 +1139,7 @@
             if (todayMood) {
                 document.querySelector(`.mood-option[data-mood="${todayMood}"]`).classList.add('selected');
             }
-            
-            // Add sample data for demonstration
-            setTimeout(() => {
-                if (getMoodData().entries.length === 0) {
-                    alert("Welcome! For demonstration, we're adding some sample mood data.");
-                    addSampleData();
-                }
-            }, 500);
         });
-        
-        // Add sample data for demonstration
-        function addSampleData() {
-            const moodData = getMoodData();
-            const today = new Date();
-            
-            // Add entries for the last 7 days
-            const moods = ['excited', 'happy', 'calm', 'sad', 'angry', 'happy', 'excited'];
-            
-            for (let i = 6; i >= 0; i--) {
-                const date = new Date(today);
-                date.setDate(today.getDate() - i);
-                const dateStr = date.toISOString().split('T')[0];
-                
-                // Only add if not already exists
-                if (!moodData.entries.some(e => e.date === dateStr)) {
-                    moodData.entries.push({
-                        date: dateStr,
-                        mood: moods[6-i]
-                    });
-                }
-            }
-            
-            localStorage.setItem('moodData', JSON.stringify(moodData));
-            updateUI();
-        }
     </script>
 </body>
 </html>
